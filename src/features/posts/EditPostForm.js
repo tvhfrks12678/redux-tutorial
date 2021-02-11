@@ -1,23 +1,20 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-
-import { postUpdated } from './postsSlice'
+import { postUpdated, selectPostById } from './postsSlice'
 
 export const EditPostForm = ({ match }) => {
   const { postId } = match.params
 
-  const post = useSelector((state) =>
-    state.posts.find((post) => post.id === postId)
-  )
+  const post = useSelector((state) => selectPostById(state, postId))
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
 
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const onTitleChange = (e) => setTitle(e.target.value)
-  const onContentChange = (e) => setContent(e.target.value)
+  const onTitleChanged = (e) => setTitle(e.target.value)
+  const onContentChanged = (e) => setContent(e.target.value)
 
   const onSavePostClicked = () => {
     if (title && content) {
@@ -27,7 +24,7 @@ export const EditPostForm = ({ match }) => {
   }
 
   return (
-    <setion>
+    <section>
       <h2>Edit Post</h2>
       <form>
         <label htmlFor="postTitle">Post Title:</label>
@@ -37,19 +34,19 @@ export const EditPostForm = ({ match }) => {
           name="postTitle"
           placeholder="What's on your mind?"
           value={title}
-          onChange={onTitleChange}
+          onChange={onTitleChanged}
         />
         <label htmlFor="postContent">Content:</label>
         <textarea
           id="postContent"
           name="postContent"
           value={content}
-          onChange={onContentChange}
+          onChange={onContentChanged}
         />
       </form>
       <button type="button" onClick={onSavePostClicked}>
         Save Post
       </button>
-    </setion>
+    </section>
   )
 }
